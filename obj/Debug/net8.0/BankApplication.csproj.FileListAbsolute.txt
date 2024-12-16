@@ -1,0 +1,14 @@
+C:\PravalTech\Developer\OneDrive - Praval\Tasks\BankSimulation\csharp-task-2-bank-rajesh-javvadi\BankApplication\BankApplication\obj\Debug\net8.0\BankApplication.GeneratedMSBuildEditorConfig.editorconfig
+C:\PravalTech\Developer\OneDrive - Praval\Tasks\BankSimulation\csharp-task-2-bank-rajesh-javvadi\BankApplication\BankApplication\obj\Debug\net8.0\BankApplication.AssemblyInfoInputs.cache
+C:\PravalTech\Developer\OneDrive - Praval\Tasks\BankSimulation\csharp-task-2-bank-rajesh-javvadi\BankApplication\BankApplication\obj\Debug\net8.0\BankApplication.AssemblyInfo.cs
+C:\PravalTech\Developer\OneDrive - Praval\Tasks\BankSimulation\csharp-task-2-bank-rajesh-javvadi\BankApplication\BankApplication\obj\Debug\net8.0\BankApplication.csproj.CoreCompileInputs.cache
+C:\PravalTech\Developer\OneDrive - Praval\Tasks\BankSimulation\csharp-task-2-bank-rajesh-javvadi\BankApplication\BankApplication\bin\Debug\net8.0\BankApplication.exe
+C:\PravalTech\Developer\OneDrive - Praval\Tasks\BankSimulation\csharp-task-2-bank-rajesh-javvadi\BankApplication\BankApplication\bin\Debug\net8.0\BankApplication.deps.json
+C:\PravalTech\Developer\OneDrive - Praval\Tasks\BankSimulation\csharp-task-2-bank-rajesh-javvadi\BankApplication\BankApplication\bin\Debug\net8.0\BankApplication.runtimeconfig.json
+C:\PravalTech\Developer\OneDrive - Praval\Tasks\BankSimulation\csharp-task-2-bank-rajesh-javvadi\BankApplication\BankApplication\bin\Debug\net8.0\BankApplication.dll
+C:\PravalTech\Developer\OneDrive - Praval\Tasks\BankSimulation\csharp-task-2-bank-rajesh-javvadi\BankApplication\BankApplication\bin\Debug\net8.0\BankApplication.pdb
+C:\PravalTech\Developer\OneDrive - Praval\Tasks\BankSimulation\csharp-task-2-bank-rajesh-javvadi\BankApplication\BankApplication\obj\Debug\net8.0\BankApplication.dll
+C:\PravalTech\Developer\OneDrive - Praval\Tasks\BankSimulation\csharp-task-2-bank-rajesh-javvadi\BankApplication\BankApplication\obj\Debug\net8.0\refint\BankApplication.dll
+C:\PravalTech\Developer\OneDrive - Praval\Tasks\BankSimulation\csharp-task-2-bank-rajesh-javvadi\BankApplication\BankApplication\obj\Debug\net8.0\BankApplication.pdb
+C:\PravalTech\Developer\OneDrive - Praval\Tasks\BankSimulation\csharp-task-2-bank-rajesh-javvadi\BankApplication\BankApplication\obj\Debug\net8.0\BankApplication.genruntimeconfig.cache
+C:\PravalTech\Developer\OneDrive - Praval\Tasks\BankSimulation\csharp-task-2-bank-rajesh-javvadi\BankApplication\BankApplication\obj\Debug\net8.0\ref\BankApplication.dll
