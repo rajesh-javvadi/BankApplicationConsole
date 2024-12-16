@@ -52,11 +52,8 @@ namespace BankApplication.Services
                 status = false;
                 return 0;
             }
-            else
-            {
-                status = true;
-                return account.Balance;
-            }
+            status = true;
+            return account.Balance;
         }
 
         internal void DepositMoney(string customerId, decimal money,Bank selectedBank,out bool depositStatus)
