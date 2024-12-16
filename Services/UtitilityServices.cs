@@ -18,10 +18,6 @@ namespace BankApplication.Services
         {
             return (accountName.Substring(0, 3) + GetCurrentDate()).ToUpper();
         }
-        public static string GetTransactionId(string bankId, string accountId)
-        {
-            return (bankId + accountId + GetCurrentDate());
-        }
         public static string GetCurrentDate()
         {
             return
