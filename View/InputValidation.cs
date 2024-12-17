@@ -53,5 +53,29 @@ namespace BankApplication.View
                 }
             } while (true);
         }
+
+        //public void ValidateUserName(out string userName)
+        //{
+        //    //do
+        //    //{
+
+        //    //}
+        //}
+
+        public void ValidateUserName(string userName)
+        {
+            do
+            {
+                userName = Console.ReadLine();
+                if(userName.Length == 0)
+                {
+                    break;
+                }
+                else if(userName.Length > 3)
+                {
+                    break;
+                }
+            } while (true);
+        }
     }
 }

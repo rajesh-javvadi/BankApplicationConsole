@@ -136,6 +136,10 @@ namespace BankApplication.View
             {
                 ListOutUserOperations(customerId,selectedBank);
             }
+            else
+            {
+                Console.WriteLine("User doen't Exist with this Username and Password");
+            }
         }
         private void ListOutOperations(Bank selectedBank)
         {
