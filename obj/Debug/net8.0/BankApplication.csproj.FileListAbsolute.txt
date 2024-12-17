@@ -12,3 +12,4 @@ C:\PravalTech\Developer\OneDrive - Praval\Tasks\BankSimulation\csharp-task-2-ban
 C:\PravalTech\Developer\OneDrive - Praval\Tasks\BankSimulation\csharp-task-2-bank-rajesh-javvadi\BankApplication\BankApplication\obj\Debug\net8.0\BankApplication.pdb
 C:\PravalTech\Developer\OneDrive - Praval\Tasks\BankSimulation\csharp-task-2-bank-rajesh-javvadi\BankApplication\BankApplication\obj\Debug\net8.0\BankApplication.genruntimeconfig.cache
 C:\PravalTech\Developer\OneDrive - Praval\Tasks\BankSimulation\csharp-task-2-bank-rajesh-javvadi\BankApplication\BankApplication\obj\Debug\net8.0\ref\BankApplication.dll
+C:\PravalTech\Developer\OneDrive - Praval\Tasks\BankSimulation\csharp-task-2-bank-rajesh-javvadi\BankApplication\BankApplication\obj\Debug\net8.0\BankApplication.sourcelink.json

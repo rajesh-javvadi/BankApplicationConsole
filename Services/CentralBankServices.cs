@@ -25,10 +25,5 @@ namespace BankApplication.Services
         {
             Storage.Banks.Add(bank);
         }
-
-        public List<ApplicationUser> GetApplicationUsers()
-        {
-            return Storage.ApplicationUsers;
-        }
     }
 }

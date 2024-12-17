@@ -22,6 +22,7 @@ namespace BankApplication.View
                 Console.WriteLine(Constants.WelcomeMessage);
                 Console.WriteLine(Constants.BankSetupMessage);
                 Console.WriteLine(Constants.ExistingBanksMessage);
+                Console.WriteLine("3.Exit");
                 uint option;
                 Console.WriteLine(Constants.OptionMessage);
                 inputValidation.ValidateNumberFormat(out option);
@@ -61,32 +62,37 @@ namespace BankApplication.View
             List<Bank> banks = centralBankServices.GetBanks();
             if(banks.Count > 0)
             {
-                uint option = 0;
-                Console.WriteLine(Constants.OptionMessage);
-                inputValidation.ValidateNumberFormat(out option);
-
-                int count = 1;
-                Bank? selectedBank = null;
-                foreach (Bank bank in banks)
+                uint option;
+                do
                 {
-                    if (count == option)
+                    Console.WriteLine(Constants.OptionMessage);
+                    Console.WriteLine("Press 0 to Exit");
+                    inputValidation.ValidateNumberFormat(out option);
+                    if (option == 0) return;
+                    int count = 1;
+                    Bank? selectedBank = null;
+                    foreach (Bank bank in banks)
                     {
-                        selectedBank = bank;
+                        if (count == option)
+                        {
+                            selectedBank = bank;
+                        }
+                        count++;
                     }
-                    count++;
-                }
-                if (selectedBank is null)
-                {
-                    Console.WriteLine(Constants.NotValidMessage);
-                }
-                else
-                {
-                    ChooseUserType(selectedBank);
-                }
+                    if (selectedBank is null)
+                    {
+                        Console.WriteLine(Constants.NotValidMessage);
+                    }
+                    else
+                    {
+                        ChooseUserType(selectedBank);
+                    }
+                } while (option != 0);
+               
             }
             else
             {
-                Console.WriteLine("No Existing banks available, Create a New Bank");
+                Console.WriteLine(Constants.CreateNewBankMessage);
             }
             
         }
@@ -98,8 +104,8 @@ namespace BankApplication.View
             {
                 uint option;
                 Console.WriteLine(Constants.OptionMessage);
-                Console.WriteLine("1.Login as a Admin or Staff");
-                Console.WriteLine("2.Login as a User");
+                Console.WriteLine(Constants.LoginAsAdminMessage);
+                Console.WriteLine(Constants.LoginAsUserMessage);
                 Console.WriteLine("3.Exit");
                 inputValidation.ValidateNumberFormat(out option);
                 switch (option)
@@ -138,14 +144,14 @@ namespace BankApplication.View
             {
                 Console.WriteLine(Constants.OptionMessage);
                 Console.WriteLine(Constants.CreateUeserMessage);
-                Console.WriteLine("2.Update Account");
-                Console.WriteLine("3.Delete Account");
-                Console.WriteLine("4.Add charges for same bank");
-                Console.WriteLine("5.Add charges for other bank");
-                Console.WriteLine("6.Add Exchange rate");
-                Console.WriteLine("7.View Transaction History");
-                Console.WriteLine("8.Revert any Transaction ");
-                Console.WriteLine("9.Exit");
+                Console.WriteLine(Constants.UpdateAccountMessage);
+                Console.WriteLine(Constants.DeleteAccountMessage);
+                Console.WriteLine(Constants.AddChargesForSameBank);
+                Console.WriteLine(Constants.AddChargesForOtherBank);
+                Console.WriteLine(Constants.AddExchangeRate);
+                Console.WriteLine(Constants.ViewTransactionHistory);
+                Console.WriteLine(Constants.RevertAnyTransaction);
+                Console.WriteLine(Constants.StaffExit);
                 uint option;
                 Console.WriteLine(Constants.OptionMessage);
                 inputValidation.ValidateNumberFormat(out option);
@@ -184,13 +190,13 @@ namespace BankApplication.View
 
         private void RevertTransaction(Bank selectedBank)
         {
-            Console.WriteLine("Enter Account Id");
+            Console.WriteLine(Constants.EnterAccountIdMessage);
             string accountId;
             inputValidation.ValidateString(out accountId);
             Account account = customerServices.FindAccountOfSameBank(selectedBank,accountId);
             if(account is null)
             {
-                Console.WriteLine("Account Not Found....");
+                Console.WriteLine(Constants.AccountNotFoundMessage);
             }
             else
             {
@@ -200,10 +206,10 @@ namespace BankApplication.View
                 uint option;
                 do
                 {
-                    Console.WriteLine("Select Which Transaction You want to Choose : ");
+                    Console.WriteLine(Constants.SelectTransactionMessage);
                     inputValidation.ValidateNumberFormat(out option);
                     if(option > historyCount)
-                    Console.WriteLine("Choose Transaction again, Entered Option is Not there in History");
+                    Console.WriteLine(Constants.ChooseTransactionMessage);
                 } while (option > historyCount);
                 List<Transaction> transactions = customerServices.GetTransactionHistory(accountId);
                 int record = 1;
@@ -214,12 +220,12 @@ namespace BankApplication.View
                     {
                         if (transaction.TransactionType == TransactionType.Deposit)
                         {
-                            Console.WriteLine("Cannot revert transactions of type Deposit");
+                            Console.WriteLine(Constants.CannotRevertDeposit);
                             validTransactionType = false;
                         }
                         else if (transaction.TransactionType == TransactionType.Withdrawl)
                         {
-                            Console.WriteLine("Cannot revert transactions of type Withdrawl");
+                            Console.WriteLine(Constants.CannotRevertWithdrawl);
                             validTransactionType = false;
                         }
                     }
@@ -228,11 +234,11 @@ namespace BankApplication.View
                 if (validTransactionType)
                 {
                     bool transactionStatus = customerServices.RevertTransaction(accountId, option, selectedBank);
-                    if(transactionStatus) Console.WriteLine("Revert Transaction is Successfull");
+                    if(transactionStatus) Console.WriteLine(Constants.RevertSuccess);
                 }
                 else
                 {
-                    Console.WriteLine("Revert Transaction is Unsuccessfull");
+                    Console.WriteLine(Constants.RevertUnSuccess);
                 }
             }
 
@@ -241,7 +247,7 @@ namespace BankApplication.View
         private void ViewTransactionHistoryByAdmin(Bank selectedBank)
         {
             string accountId;
-            Console.WriteLine("Enter Account Id : ");
+            Console.WriteLine(Constants.EnterAccountIdMessage);
             inputValidation.ValidateString(out accountId);
             Account ac = customerServices.FindAccountOfSameBank(selectedBank, accountId);
             if (ac is not null)
@@ -250,7 +256,7 @@ namespace BankApplication.View
             }
             else
             {
-                Console.WriteLine("Account is Not Found");
+                Console.WriteLine(Constants.AccountNotFoundMessage);
             }
         }
 
@@ -259,12 +265,12 @@ namespace BankApplication.View
             List<Transaction> transactionHistory = customerServices.GetTransactionHistory(accountId);
             if (transactionHistory.Count > 0)
             {
-                Console.WriteLine("Transaction History : ");
+                Console.WriteLine(Constants.TransactionHistory);
                 foreach (Transaction transaction in transactionHistory)
                 {
                     if (transaction.FromId.Equals(transaction.ToId))
                     {
-                        string value = transaction.TransactionType == TransactionType.Deposit ? "Credited" : "Debited";
+                        string value = transaction.TransactionType == TransactionType.Deposit ? Constants.Credited : Constants.Debited;
                         Console.WriteLine($"{transaction.TransactionId} {transaction.TimeOfTransaction} {transaction.TransactionType} {transaction.Amount} {value}");
                     }
                     else if (transaction.FromId.Equals(accountId))
@@ -276,7 +282,7 @@ namespace BankApplication.View
                         Console.WriteLine($"{transaction.TransactionId} {transaction.TimeOfTransaction} {transaction.TransactionType} +{transaction.Amount - transaction.Fee} Credited");
                     }
                 }
-            } else Console.WriteLine("No Transaction History Available");
+            } else Console.WriteLine(Constants.NoTransactionHistory);
         }
 
         private void ListOutUserOperations(string customerId,Bank selectedBank)
@@ -284,12 +290,12 @@ namespace BankApplication.View
             bool stopLoop = false;
             do
             {
-                Console.WriteLine("1.Deposit Money");
-                Console.WriteLine("2.Withdraw Money");
-                Console.WriteLine("3.Transfer Funds");
-                Console.WriteLine("4.View Transaction History");
-                Console.WriteLine("5.Check Balance");
-                Console.WriteLine("6.Exit");
+                Console.WriteLine(Constants.DepositMoney);
+                Console.WriteLine(Constants.WithdrawMoney);
+                Console.WriteLine(Constants.TransferFunds);
+                Console.WriteLine(Constants.ViewTransactionHistoryUser);
+                Console.WriteLine(Constants.CheckBalance);
+                Console.WriteLine(Constants.UserExit);
                 stopLoop = ChooseUserOperation(customerId,selectedBank);
             } while (!stopLoop);
 
@@ -311,14 +317,14 @@ namespace BankApplication.View
                     money = GetMoney();
                     money = money * value;
                     customerServices.DepositMoney(customerId, money,selectedBank,out depositStatus);
-                    if(depositStatus) Console.WriteLine("Deposit Successfull");
-                    else Console.WriteLine("Deposit Not successfull");
+                    if(depositStatus) Console.WriteLine(Constants.DepositSuccess);
+                    else Console.WriteLine(Constants.DepositFailure);
                     break;
                 case 2:
                     money = GetMoney();
                     withdrawlSuccess = customerServices.WithdrawMoney(customerId, money,selectedBank);
-                    if (!withdrawlSuccess) Console.WriteLine("Withdrawl failed Check your balance");
-                    else Console.WriteLine("Withdrawl Success");
+                    if (!withdrawlSuccess) Console.WriteLine(Constants.WithdrawFailure);
+                    else Console.WriteLine(Constants.WithdrawlSuccess);
                     break;
                 case 3:
                     TransferFunds(customerId, selectedBank);
@@ -329,8 +335,8 @@ namespace BankApplication.View
                 case 5:
                     bool checkStatus = false;
                     money = customerServices.CheckBalance(customerId,out checkStatus);
-                    if(checkStatus) Console.WriteLine("Total Balance : " + money);
-                    else Console.WriteLine("Something wrong in Checking balance");
+                    if(checkStatus) Console.WriteLine(String.Format(Constants.TotalBalance,money));
+                    else Console.WriteLine(Constants.CannotAbleToFetchBalance);
                     break;
                 case 6:
                     stopLoop = true;
@@ -341,10 +347,10 @@ namespace BankApplication.View
 
         private void TransferFunds(string customerId, Bank selectedBank)
         {
-            Console.WriteLine("Enter Transfer Type : ");
+            Console.WriteLine(Constants.ChooseTransferType);
             //inputValidation.ValidateString(out recieverAccountId);
-            Console.WriteLine("1.RTGS");
-            Console.WriteLine("2.IMPS");
+            Console.WriteLine(Constants.RTGS);
+            Console.WriteLine(Constants.IMPS);
             uint option;
             Console.WriteLine(Constants.OptionMessage);
             inputValidation.ValidateNumberFormat(out option);
@@ -365,7 +371,7 @@ namespace BankApplication.View
         private void TransferTransaction(string customerId, Bank selectedBank,TransactionType transactionType)
         { 
             uint option;
-            bool transactionStatus = false;
+            Response transactionStatus;
             Console.WriteLine(Constants.OptionMessage);
             SelectBankTransferType(out option);
             switch(option)
@@ -376,16 +382,14 @@ namespace BankApplication.View
                     if(userExistsInCurrentBank)
                     {
                         transactionStatus = customerServices.BankToBankTransfer(selectedBank, customerId, rAcId, transactionType,GetMoney());
-                        if(!transactionStatus) Console.WriteLine("Transaction is Failed");
-                        else Console.WriteLine("Transaction Success");
+                        Console.WriteLine(transactionStatus.ResponseMessage);
                     }
-                    else Console.WriteLine("Unable to Fetch Account ID, Check Account ID");
+                    else Console.WriteLine(Constants.UnableToFetchAccount);
                     break;
                 case 2:
                      rAcId = AskAccountId();
                     transactionStatus = customerServices.BankToOtherBankTransfer(selectedBank, customerId, rAcId, transactionType, GetMoney());
-                    if (!transactionStatus) Console.WriteLine("Transaction is Failed");
-                    else Console.WriteLine("Transaction Success");
+                    Console.WriteLine(transactionStatus.ResponseMessage);
                     break;
                 default:
                     Console.WriteLine(Constants.NotValidMessage);
@@ -400,25 +404,18 @@ namespace BankApplication.View
         string AskAccountId()
         {
             string accountId;
-            Console.WriteLine("Enter Receiver Id: ");
+            Console.WriteLine(Constants.RecieverId);
             inputValidation.ValidateString(out accountId);
             return accountId;
         }
 
         void SelectBankTransferType(out uint option)
         {
-            Console.WriteLine("Enter Transfer Type :");
-            Console.WriteLine("1.Bank to Bank Transfer");
-            Console.WriteLine("2.Bank to anther Bank Transfer ");
+            Console.WriteLine(Constants.ChooseTransferType);
+            Console.WriteLine(Constants.BankToBank);
+            Console.WriteLine(Constants.BankToAnotherBank);
             inputValidation.ValidateNumberFormat(out option);
 
-        }
-
-        private void RtgsTransaction(string customerId, Bank selectedBank)
-        {
-            uint option;
-            SelectBankTransferType(out option);
-            throw new NotImplementedException();
         }
 
         private void ViewTransactionHistoryByUser(string customerId, Bank selectedBank)
@@ -430,14 +427,14 @@ namespace BankApplication.View
             }
             else
             {
-                Console.WriteLine("Something Wrong with Finding Account");
+                Console.WriteLine(Constants.SomethingWrongInFindingAccount);
             }
         }
 
         decimal GetMoney()
         {
             decimal money;
-            Console.WriteLine("Enter Amount : ");
+            Console.WriteLine(Constants.EnterAmount);
             money = Convert.ToDecimal(Console.ReadLine());
             return money;
         }
@@ -474,9 +471,9 @@ namespace BankApplication.View
 
         private void GetUserNameandPassword(out string userName, out string password)
         {
-            Console.WriteLine("Enter Username ");
+            Console.WriteLine(Constants.EnterUserName);
             inputValidation.ValidateString(out userName);
-            Console.WriteLine("Enter Password ");
+            Console.WriteLine(Constants.EnterPassword);
             inputValidation.ValidateString(out password);
         }
 
@@ -501,7 +498,7 @@ namespace BankApplication.View
         private void AddExchangeRate(Bank selectedBank)
         {
             string currency;
-            Console.Write("Enter Exchange Curreny Type : ");
+            Console.Write(Constants.AddExchangeRate);
             inputValidation.ValidateString(out currency);
             uint value;
             inputValidation.ValidateNumberFormat(out value);
@@ -512,11 +509,15 @@ namespace BankApplication.View
         {
             if (!CheckCustomerExists(selectedBank)) return;
             string accountId;
-            Console.WriteLine("Enter Account Id");
+            Console.WriteLine(Constants.EnterAccountIdMessage);
             inputValidation.ValidateString(out accountId);
             if(!customerServices.DeleteAccount(selectedBank,accountId))
             {
-                Console.WriteLine("Deletion of Account was Unsuccesfull");
+                Console.WriteLine(Constants.AccountDeletionUnsuccesssfull);
+            }
+            else
+            {
+                Console.WriteLine(Constants.AccountDeletionSuccessfull);
             }
         }
 
@@ -525,7 +526,7 @@ namespace BankApplication.View
             int customerCount = customerServices.GetCustomersCount(bank);
             if (customerCount == 0)
             {
-                Console.WriteLine("No customers exists");
+                Console.WriteLine(Constants.NoCustomer);
                 return false;
             }
             return true;
@@ -535,34 +536,22 @@ namespace BankApplication.View
         {
             string accountId;
             if (!CheckCustomerExists(selectedBank)) return;
-            Console.WriteLine("Enter Account Id");
+            Console.WriteLine(Constants.EnterAccountIdMessage);
             inputValidation.ValidateString(out accountId);
             ApplicationUser applicationUser = customerServices.FetchCustomerByAccount(selectedBank,accountId);
             if(applicationUser is not null)
             {
-                Console.WriteLine("Name Only available field ");
-                Console.WriteLine("Enter your Updated Name :");
+                Console.WriteLine(Constants.NameOnlyAvailableField);
+                Console.WriteLine(Constants.UpdatedNamePlease);
                 string name;
                 inputValidation.ValidateString(out name);
                 customerServices.UpdateCustomerDetails(applicationUser, name);
             }
             else
             {
-                Console.WriteLine("Account User didn't exist ");
+                Console.WriteLine(Constants.AccountUserNotExist);
             }
         }
-
-        
-
-        private void ViewCharges(Bank selectedBank)
-        {
-            Console.WriteLine("Charges : ");
-            Console.WriteLine($"Rtgs for same Bank : {selectedBank.SameBankRtgsCharges}");
-            Console.WriteLine($"Rtgs for other Bank: {selectedBank.OtherBankRtgsCharges}");
-            Console.WriteLine($"Imps for Same bank : {selectedBank.SameBankImpsCharges}");
-            Console.WriteLine($"Imps for other Bank : {selectedBank.OtherBankImpsCharges}");
-        }
-
         private void AddChargesForOtherBank(Bank selectedBank)
         {
             uint rtgs, imps;
@@ -584,8 +573,8 @@ namespace BankApplication.View
         private void ChargesOption(out uint rtgs, out uint imps, ref bool changeRtgs)
         {
             Console.WriteLine(Constants.OptionMessage);
-            Console.WriteLine("1.RTGS");
-            Console.WriteLine("2.IMPS");
+            Console.WriteLine(Constants.RTGS);
+            Console.WriteLine(Constants.IMPS);
             uint option;
             rtgs = 0;
             imps = 5;
@@ -593,11 +582,11 @@ namespace BankApplication.View
             switch (option)
             {
                 case 1:
-                    Console.WriteLine("Enter New RTGS Charges : ");
+                    Console.WriteLine(Constants.NewRTgsCharges);
                     rtgs = Convert.ToUInt32(Console.ReadLine());
                     break;
                 case 2:
-                    Console.WriteLine("Enter New IMPS Charges : ");
+                    Console.WriteLine(Constants.NewImpsCharges);
                     imps = Convert.ToUInt32(Console.ReadLine());
                     changeRtgs = false;
                     break;
@@ -610,7 +599,7 @@ namespace BankApplication.View
             string username;
             string password;
             Customer customer = new();
-            Console.WriteLine("Enter Account Holder Name");
+            Console.WriteLine(Constants.AccountHolderName);
             string name;
             inputValidation.ValidateString(out name);
             customer.Name = name;
@@ -627,8 +616,8 @@ namespace BankApplication.View
             };
             customer.account = account;
             customerServices.CreateAccount(customer);
-            Console.WriteLine($"Account Created Successfully with Account Id {account.AccountId}");
-            Console.WriteLine("Note it down.... ");
+            Console.WriteLine(String.Format(Constants.AccountCreationSuccessfull,account.AccountId));
+            Console.WriteLine(Constants.NoteDown);
         }
 
         private bool ValidateStaff(Bank selectedBank, string? userName, string? password)
@@ -658,11 +647,11 @@ namespace BankApplication.View
                 Id = UtilityServices.GenerateStaffId(),
             };
             string staffUName;
-            Console.WriteLine("Enter Staff Username : ");
+            Console.WriteLine(Constants.StaffUserName);
             inputValidation.ValidateString(out staffUName);
             staff.UserName = staffUName;
             staff.Name = staffUName;
-            Console.WriteLine("Enter Staff Password");
+            Console.WriteLine(Constants.StaffPassword);
             string password;
             inputValidation.ValidateString(out password);
             staff.Password = password;

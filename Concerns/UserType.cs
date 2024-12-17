@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace BankApplication.Concerns
 {
-    internal enum UserType
+    public enum UserType
     {
         Customer,
         Staff

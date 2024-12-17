@@ -37,7 +37,9 @@ namespace BankApplication.Services
             //        break;
             //    }
             //}
-            ApplicationUser? appUser = applicationUsers.Where(user => user.UserName.Equals(username) && user.Password.Equals(password)
+
+            ApplicationUser? appUser = null;
+            appUser = applicationUsers.Where(user => user.UserName.Equals(username) && user.Password.Equals(password)
             && user.BankId.Equals(bank.BankId) && user.UserType == Concerns.UserType.Customer).SingleOrDefault();
 
             if (appUser is not null) { customerId = appUser.Id; isValid = true; }
@@ -64,7 +66,6 @@ namespace BankApplication.Services
                 account.Balance += money;
                 CreateTransaction(account, selectedBank, TransactionType.Deposit, money);
                 depositStatus = true;
-                
             }
             else
             { 
@@ -189,35 +190,42 @@ namespace BankApplication.Services
             return transactions;
         }
 
-        public bool BankToBankTransfer(Bank bank,string customerId,string receiverAccountId,TransactionType transactionType,decimal money)
+        public Response BankToBankTransfer(Bank bank,string customerId,string receiverAccountId,TransactionType transactionType,decimal money)
         {
-            bool bankTransferStatus = false;
+            Response bankTransferStatus = new Response();
             List<ApplicationUser> users = Storage.ApplicationUsers;
             Account account = FindAccountByCustomerId(customerId);
             Account recieverAccount = FindAccountOfSameBank(bank, receiverAccountId);
             if(account.AccountId == receiverAccountId)
             {
-                bankTransferStatus = false;
-                return bankTransferStatus;
+                bankTransferStatus.ResponeCode = 105;
+                bankTransferStatus.ResponseMessage = Constants.SameAccountInfo;
             }
             else if(recieverAccount is null)
             {
-                bankTransferStatus = false;
+                bankTransferStatus.ResponeCode = 101;
+                bankTransferStatus.ResponseMessage = Constants.RecieverAccountNotFoundInfo;
             }
             else
             {
                 if(account.Balance >= money)
                 {
                     CreateTransactionForTransferFunds(bank, account, recieverAccount, transactionType, money, true);
-                    bankTransferStatus = true;
+                    bankTransferStatus.ResponeCode = 200;
+                    bankTransferStatus.ResponseMessage = Constants.TransactionSuccessfull;
+                }
+                else
+                {
+                    bankTransferStatus.ResponeCode = 103;
+                    bankTransferStatus.ResponseMessage = Constants.InsufficientFunds;
                 }
             }
             return bankTransferStatus; 
         }
 
-        public bool BankToOtherBankTransfer(Bank bank, string customerId, string receiverAccountId, TransactionType transactionType,decimal money)
+        public Response BankToOtherBankTransfer(Bank bank, string customerId, string receiverAccountId, TransactionType transactionType,decimal money)
         {
-            bool bankTransferStatus = false;
+            Response bankTransferStatus = new Response() ;
             Account account = FindAccountByCustomerId(customerId);
             Account receiverAccount = FindAccountByAccountId(receiverAccountId);
             List<ApplicationUser> users = Storage.ApplicationUsers;
@@ -230,10 +238,25 @@ namespace BankApplication.Services
                     if(account.Balance >= money)
                     {
                         CreateTransactionForTransferFunds(bank, account, receiverAccount, transactionType, money, false);
-                        bankTransferStatus = true;
+                        bankTransferStatus.ResponseMessage = Constants.TransactionSuccessfull;
+                        bankTransferStatus.ResponeCode = 200;
                     }
-
+                    else
+                    {
+                        bankTransferStatus.ResponseMessage = Constants.InsufficientFunds;
+                        bankTransferStatus.ResponeCode = 103;
+                    }
                 }
+                else
+                {
+                    bankTransferStatus.ResponeCode = 102;
+                    bankTransferStatus.ResponseMessage = Constants.SameBankSelectedDifferentBankInfo;
+                }
+            }
+            else if(c2 == null)
+            {
+                bankTransferStatus.ResponeCode = 101;
+                bankTransferStatus.ResponseMessage = Constants.RecieverAccountNotFoundInfo;
             }
             return bankTransferStatus;
         }
